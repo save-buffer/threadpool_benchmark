@@ -181,20 +181,23 @@ void BenchmarkRunningTasks<OmpThreadPool>(ankerl::nanobench::Bench &bench, const
 {
     constexpr int num_tasks = 1000 * 1000;
     bench.batch(num_tasks);
-    bench.warmup(3).minEpochIterations(10).run(name,
-              [&]()
-              {
-                  #pragma omp parallel
-                  {
-                      #pragma omp master
-                      for(int i = 0; i < num_tasks; i++)
-                      {
-                          #pragma omp task
-                          { ThreadLocalCounter++; }
-                      }
-                  }
-              });
+    {
+        bench.warmup(3)
+            .minEpochIterations(10)
+            .run(name,
+                 [&]()
+                 {
+                     #pragma omp parallel
+                     #pragma omp single
+                     for(int i = 0; i < num_tasks; i++)
+                     {
+                         #pragma omp task
+                         { ThreadLocalCounter++; }
+                     }
+                 });
+    }
 }
+
 
 int main()
 {

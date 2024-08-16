@@ -3,9 +3,9 @@ Which threadpool is the fastest? A naive centralized lock one? OpenMP? Grand Cen
 ```
 |             ns/task |              task/s |    err% |     total | TaskingOverhead
 |--------------------:|--------------------:|--------:|----------:|:----------------
-|              144.54 |        6,918,284.48 |    1.5% |     17.79 | `GCD`
-|            1,071.72 |          933,077.90 |    2.2% |    128.98 | `Custom`
-|            3,399.83 |          294,132.17 |    9.9% |    385.60 | :wavy_dash: `OpenMP` (Unstable with ~11.1 iters. Increase `minEpochIterations` to e.g. 111)
+|              146.86 |        6,809,180.93 |    0.8% |     17.92 | `GCD`
+|            1,106.50 |          903,748.24 |    1.4% |    131.69 | `Custom`
+|            2,354.41 |          424,735.59 |    3.5% |    646.36 | `OpenMP`
 ```
 
 Surprisingly, OpenMP seems to be really bad on MacOS, at least in this benchmark. Need further investigation about why. Grand Central Dispatch is fastest by an order of magnitude, suggesting it's good enough to build your parallel apps on it. 
